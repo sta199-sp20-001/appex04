@@ -1,0 +1,138 @@
+---
+title: "Mapping the Coronavirus Outbreak"
+author: ""
+date: ""
+output: 
+  html_document:
+    toc: true
+    number_sections: false
+    toc_float: true
+    df_print: paged
+---
+
+```{r set-up, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE,
+                      comment = "#>", highlight = TRUE,
+                      fig.align = "center")
+```
+
+# Getting started
+
+1. Clone your repo `appex04-[github_name]` to create a new project
+   in RStudio Cloud under the STA 199 class space.
+
+2. Configure git
+      ```{r config-git-ex, eval=FALSE}
+      library(usethis)
+      use_git_config(user.name="your name", user.email="your email")
+      ```
+
+# Packages and Data
+
+We'll make use of the following packages.
+
+```{r load-packages}
+library(sf)
+library(tidyverse)
+```
+
+There are two data files we will use: `world.shp`, `coronavirus.shp`. We'll
+read each of these in with function `st_read()` and save them as `world` and
+`virus`.
+
+```{r}
+world <- st_read("data/world.shp", quiet = TRUE)
+virus <- st_read("data/coronavirus.shp", quiet = TRUE)
+```
+
+# Tasks
+
+## Task 1
+
+Take a look at objects `world` and `virus`. How many fields exist for each
+object? What type of geometry is associated with each `sf` object?
+
+```{r task-1-world}
+world
+```
+
+```{r task-1-virus}
+virus
+```
+
+## Task 2
+
+#### Part 1
+
+Use object `world` to create a world map of the countries. You'll want to use
+functions `ggplot()` and `geom_sf()`.
+
+```{r task-2-p1}
+
+```
+
+#### Part 2
+
+Build on your map from Part 1 so that the countries have a fill color 
+associated with the population estimate. Variable `pop_est` is in millions.
+Be sure to label your map.
+
+```{r task-2-p2}
+
+```
+
+## Task 3
+
+Filter `world` for the country "China". Save the result as `china`.
+
+```{r task-3-china}
+china <- world %>% 
+  filter(name == "China")
+```
+
+Next, we'll filter object `virus` for confirmed cases in China and save the
+result as `china_cv`. The code is given below.
+
+```{r task-3-china-cv}
+china_cv <- virus %>% 
+  filter(cntry_r == "Mainland China", !is.na(confrmd))
+```
+
+- `cntry_r == "Mainland China"` filters rows so we only keep information on
+  China
+  
+- `!is.na(confrmd)` filters rows for where there is not a missing confirmed
+  case of coronavirus
+
+## Task 4
+
+Use the template provided to overlay the point locations of the coronavirus
+in China with a map of China. Have the size of the points reflect the
+number of confirmed cases. Refer to slides 31-32 as a guide.
+
+```{r task-4, fig.width=9, fig.height=6}
+ggplot(data = china) +
+  geom_sf(fill = "#DE2910")
+```
+
+*Hints:*
+
+- you'll need another `geom_sf()` layer
+- set point colors as `color = "#FFDE00"`
+- inside this second `geom_sf()` include `show.legend = "point"` to have the 
+  legend show points rather than squares
+
+# Submission
+
+## Stage, commit and push
+
+1. Stage your modified files.
+2. Commit your changes with an informative message.
+3. Push your changes to your GitHub repo.
+4. Verify your files were updated on GitHub.
+
+# Slide notes
+
+# References
+
+1. Simple Features for R vignette, https://r-spatial.github.io/sf/
